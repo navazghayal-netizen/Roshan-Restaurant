@@ -1,0 +1,16 @@
+[
+  { "id": "p1",  "name": "Gravy Chicken",  "price": 200, "desc": "Made with homely taste & restaurant-style flavor",         "img": "Image/chicken-gravy-1.webp" },
+  { "id": "p2",  "name": "Gravy Mutton",   "price": 250, "desc": "Loaded with tender mutton & rich spices",                  "img": "Image/mutton-500x500.webp" },
+  { "id": "p3",  "name": "Jinga",          "price": 200, "desc": "Ocean's freshness cooked with authentic masala",           "img": "Image/Prawn-Biryani-Recipe-480x270.webp" },
+  { "id": "p4",  "name": "Fish",           "price": 200, "desc": "Ocean Fresh Flavor",                                       "img": "Image/Fish-Curry-4.jpg" },
+  { "id": "p5",  "name": "Chicken Biryani","price": 220, "desc": "Chicken Biryani — Tradition Served Hot",                  "img": "Image/Boneless-Chicken-Biryani-Meghanas-2-500x500.jpg" },
+  { "id": "p6",  "name": "Mutton Biryani", "price": 280, "desc": "Mutton Biryani — A taste of royal tradition",             "img": "Image/Mutton-Masala-min.jpg" },
+  { "id": "p7",  "name": "Jinga Biryani",  "price": 250, "desc": "Jinga Biryani — Coastal freshness meets royal spice",     "img": "Image/Prawn-Biryani-Recipe-480x270.webp" },
+  { "id": "p9",  "name": "Fish Biryani",   "price": 250, "desc": "Fish Biryani — Coastal taste with royal spice",           "img": "Image/Fish-Masala1_1200x.jpg" },
+  { "id": "p10", "name": "Chicken Masala", "price": 220, "desc": "Every bite bursting with masala magic",                   "img": "Image/GrChicken-Masala-Curryoup-1.jpg" },
+  { "id": "p11", "name": "Mutton Masala",  "price": 300, "desc": "Mutton Masala — Spiced with tradition, served with love", "img": "Image/Mutton-Masala-min.jpg" },
+  { "id": "p12", "name": "Jinga Masala",   "price": 250, "desc": "Jinga Masala — Ocean freshness with desi spices",        "img": "Image/Prawn-Biryani-Recipe-480x270.webp" },
+  { "id": "p13", "name": "Fish Masala",    "price": 250, "desc": "Fish Masala — Ocean flavor with desi spice",              "img": "Image/Fish-Masala1_1200x.jpg" },
+  { "id": "p14", "name": "Rotla",          "price": 25,  "desc": "Soft, fresh & homely — just like Ghar ka Rotla",         "img": "Image/Bajri-Rotla-Kutch.png" },
+  { "id": "p15", "name": "Rotli",          "price": 15,  "desc": "Soft & fresh Rotli — the soul of every meal",            "img": "Image/roti.jpg" }
+]

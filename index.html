@@ -1,0 +1,1380 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Roshan Restaurant</title>
+  <meta name="description" content="Roshan Restaurant - Fresh, flavorful non-veg dishes served with homely taste and real spices." />
+  <meta name="theme-color" content="#F59E0B"/>
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Minor custom styles to complement Tailwind */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* subtle focus ring for keyboard users */
+    .focus-ring:focus { outline: 3px solid rgba(245,158,11,0.25); outline-offset: 2px; }
+    /* screen-reader only */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    /* small animation */
+    .fade-in { animation: fadeIn 400ms ease both; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+    .whatsapp-btn { background: linear-gradient(90deg,#25D366,#128C7E); }
+    html { scroll-behavior: smooth; }
+    body { overflow-x: hidden; }
+    .product-card { min-width: 0; }
+    .product-card img { aspect-ratio: 4 / 3; }
+    .product-title, .product-desc { overflow-wrap: anywhere; }
+    .product-desc {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .shop-btn {
+      min-height: 46px;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0;
+      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
+      transform: translateY(0);
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+    }
+    .shop-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 24px rgba(15, 23, 42, 0.18);
+      filter: saturate(1.05);
+    }
+    .shop-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 7px 14px rgba(15, 23, 42, 0.12);
+    }
+    .add-btn {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+    .buy-btn {
+      background: linear-gradient(135deg, #16a34a, #047857);
+    }
+    @media (max-width: 640px) {
+      .product-card { border-radius: 12px; padding: 10px; }
+      .product-card img { height: 112px; margin-bottom: 10px; }
+      .product-title { font-size: 0.95rem; line-height: 1.2rem; }
+      .product-desc { font-size: 0.75rem; line-height: 1rem; min-height: 2rem; }
+      .product-actions { flex-direction: column; align-items: stretch; gap: 8px; }
+      .buy-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .buy-actions button { width: 100%; min-height: 42px; padding-left: 10px; padding-right: 10px; font-size: 0.9rem; }
+    }
+    /* dark mode helpers (class switch) */
+    .dark-mode body {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .dark-mode header,
+    .dark-mode #mobileNav,
+    .dark-mode #mainHeader,
+    .dark-mode #cartSidebar,
+    .dark-mode #checkoutForm,
+    .dark-mode #whatsappPage > div,
+    .dark-mode #orderSuccess > div,
+    .dark-mode #historyModal > div,
+    .dark-mode #loadingSpinner > div,
+    .dark-mode .product-card,
+    .dark-mode details {
+      background: #111827 !important;
+      color: #e5e7eb !important;
+      border-color: #263244 !important;
+    }
+    .dark-mode #home,
+    .dark-mode #faq,
+    .dark-mode #contact,
+    .dark-mode .bg-yellow-50,
+    .dark-mode .bg-yellow-100,
+    .dark-mode .bg-gray-50 {
+      background: #0f172a !important;
+    }
+    /* Different section backgrounds for visual distinction in dark mode */
+    .dark-mode #home {
+      background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%) !important;
+    }
+    .dark-mode #products {
+      background: #0f172a !important;
+    }
+    .dark-mode #products .product-card {
+      background: #1e293b !important;
+      border-color: #334155 !important;
+    }
+    .dark-mode #testimonials {
+      background: #1e293b !important;
+    }
+    .dark-mode #faq {
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%) !important;
+    }
+    .dark-mode #contact {
+      background: #0f172a !important;
+    }
+    .dark-mode footer {
+      background: #020617 !important;
+    }
+    .dark-mode #testimonials,
+    .dark-mode section.bg-white,
+    .dark-mode footer + *,
+    .dark-mode .bg-white {
+      background: #1e293b !important;
+      color: #e5e7eb !important;
+    }
+    .dark-mode blockquote,
+    .dark-mode .bg-gray-100 {
+      background: #1f2937 !important;
+      color: #e5e7eb !important;
+    }
+    .dark-mode .text-gray-900,
+    .dark-mode .text-gray-800,
+    .dark-mode .text-gray-700,
+    .dark-mode .text-gray-600,
+    .dark-mode .text-gray-500,
+    .dark-mode label,
+    .dark-mode summary {
+      color: #d1d5db !important;
+    }
+    .dark-mode .text-yellow-600,
+    .dark-mode .text-yellow-700 {
+      color: #fbbf24 !important;
+    }
+    .dark-mode .border,
+    .dark-mode .border-t,
+    .dark-mode .border-b,
+    .dark-mode .border-gray-100,
+    .dark-mode .border-gray-200,
+    .dark-mode .border-gray-300 {
+      border-color: #263244 !important;
+    }
+    .dark-mode input,
+    .dark-mode textarea {
+      background: #0f172a !important;
+      color: #f9fafb !important;
+      border-color: #334155 !important;
+    }
+    .dark-mode input::placeholder,
+    .dark-mode textarea::placeholder {
+      color: #94a3b8 !important;
+    }
+    .dark-mode button:hover,
+    .dark-mode a:hover {
+      background-color: rgba(251, 191, 36, 0.12);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+  <!-- ======================= TOPBAR ======================= -->
+  <div id="topbar" style="background:linear-gradient(90deg,#92400e,#b45309,#d97706);color:#fff;font-size:0.78rem;padding:6px 0;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(255,255,255,0.03) 80px,rgba(255,255,255,0.03) 81px);pointer-events:none;"></div>
+    <div class="max-w-7xl mx-auto px-3 sm:px-6" style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:2px 10px;font-weight:600;letter-spacing:0.3px;">🛵 Free delivery • Jam Khambhaliya</span>
+        <span style="opacity:0.7;display:none;" class="sm:inline">|  Open daily 10am – 11pm</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <a href="tel:+919978349653" style="display:flex;align-items:center;gap:5px;color:#fff;text-decoration:none;font-weight:600;background:rgba(255,255,255,0.15);padding:3px 12px;border-radius:20px;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+          <svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg>
+          9978349653
+        </a>
+        <button id="darkToggle" style="background:rgba(255,255,255,0.15);border:none;color:#fff;cursor:pointer;padding:3px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+          🌙 Dark
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================= NAVBAR ======================= -->
+  <header id="mainHeader" style="background:#fff;position:sticky;top:0;z-index:50;box-shadow:0 1px 0 #e5e7eb,0 4px 20px rgba(0,0,0,0.06);transition:box-shadow 0.3s;">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6" style="height:68px;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+
+      <!-- ── LOGO ── -->
+      <a href="#home" aria-label="Roshan Restaurant Home" style="display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0;">
+        <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#b45309);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(180,83,9,0.35);flex-shrink:0;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8 2 5 6 5 10c0 3 1.5 5.5 4 7v2h6v-2c2.5-1.5 4-4 4-7 0-4-3-8-7-8z" fill="white" opacity="0.9"/>
+            <path d="M9 21h6M10 23h4" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div style="line-height:1;">
+          <div style="font-size:1.15rem;font-weight:800;color:#92400e;letter-spacing:-0.3px;">Roshan</div>
+          <div style="font-size:0.7rem;font-weight:600;color:#b45309;letter-spacing:1.5px;text-transform:uppercase;margin-top:1px;">Restaurant</div>
+        </div>
+      </a>
+
+      <!-- ── DESKTOP NAV ── -->
+      <nav class="hidden md:flex" style="gap:4px;" aria-label="Primary">
+        <a href="#home"     class="nav-link" style="padding:8px 16px;border-radius:8px;font-weight:600;font-size:0.9rem;color:#374151;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#fef3c7';this.style.color='#b45309'" onmouseout="this.style.background='transparent';this.style.color='#374151'">Home</a>
+        <a href="#products" class="nav-link" style="padding:8px 16px;border-radius:8px;font-weight:600;font-size:0.9rem;color:#374151;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#fef3c7';this.style.color='#b45309'" onmouseout="this.style.background='transparent';this.style.color='#374151'">Menu</a>
+        <a href="#about"    class="nav-link" style="padding:8px 16px;border-radius:8px;font-weight:600;font-size:0.9rem;color:#374151;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#fef3c7';this.style.color='#b45309'" onmouseout="this.style.background='transparent';this.style.color='#374151'">About</a>
+        <a href="#faq"      class="nav-link" style="padding:8px 16px;border-radius:8px;font-weight:600;font-size:0.9rem;color:#374151;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#fef3c7';this.style.color='#b45309'" onmouseout="this.style.background='transparent';this.style.color='#374151'">FAQ</a>
+        <a href="#contact"  class="nav-link" style="padding:8px 16px;border-radius:8px;font-weight:600;font-size:0.9rem;color:#374151;text-decoration:none;transition:all 0.2s;" onmouseover="this.style.background='#fef3c7';this.style.color='#b45309'" onmouseout="this.style.background='transparent';this.style.color='#374151'">Contact</a>
+      </nav>
+
+      <!-- ── RIGHT GROUP ── -->
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+
+        <!-- User section (login/register or profile) -->
+        <div id="userSection" style="display:flex;align-items:center;gap:6px;">
+          <button id="loginBtn" style="padding:8px 18px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;border:none;border-radius:8px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(245,158,11,0.35);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 14px rgba(245,158,11,0.45)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 2px 8px rgba(245,158,11,0.35)'">Login</button>
+          <button id="registerBtn" style="padding:8px 18px;background:#fff;color:#b45309;border:1.5px solid #d97706;border-radius:8px;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='#fff'">Register</button>
+        </div>
+
+        <div id="userProfile" class="hidden" style="display:none;align-items:center;gap:8px;">
+          <div style="text-align:right;">
+            <div id="userName" style="font-size:0.85rem;font-weight:700;color:#1f2937;">User</div>
+            <div id="userEmail" style="font-size:0.7rem;color:#6b7280;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+          </div>
+          <button id="logoutBtn" style="padding:6px 14px;background:#fee2e2;color:#dc2626;border:none;border-radius:7px;font-size:0.8rem;font-weight:700;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='#fecaca'" onmouseout="this.style.background='#fee2e2'">Logout</button>
+        </div>
+
+        <!-- Orders history -->
+        <button id="historyBtn" class="hidden sm:inline-flex" style="padding:8px 14px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;font-size:0.83rem;font-weight:600;color:#374151;cursor:pointer;display:none;align-items:center;gap:5px;transition:all 0.2s;" onmouseover="this.style.background='#fef3c7';this.style.borderColor='#d97706'" onmouseout="this.style.background='#f9fafb';this.style.borderColor='#e5e7eb'" title="View Orders">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+          Orders
+        </button>
+
+        <!-- Cart -->
+        <button id="cartBtn" aria-label="Open cart" style="position:relative;width:44px;height:44px;background:#fef3c7;border:none;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;" onmouseover="this.style.background='#fde68a';this.style.transform='scale(1.05)'" onmouseout="this.style.background='#fef3c7';this.style.transform='scale(1)'">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#b45309" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.35 2.7A1 1 0 007.6 17h9.8a1 1 0 00.9-.6L21 9H6.4M7 13h10"/>
+          </svg>
+          <span id="cartCount" style="position:absolute;top:-5px;right:-5px;background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;font-size:0.65rem;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;border:2px solid #fff;padding:0 3px;">0</span>
+        </button>
+
+        <!-- Mobile menu -->
+        <button id="mobileMenuBtn" class="md:hidden" style="width:44px;height:44px;background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;" aria-label="Open menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#374151" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ── MOBILE NAV DROPDOWN ── -->
+    <div id="mobileNav" class="md:hidden hidden" style="border-top:1px solid #f3f4f6;background:#fff;">
+      <div style="padding:12px 16px;display:flex;flex-direction:column;gap:4px;">
+        <a href="#home"     style="padding:10px 14px;border-radius:8px;font-weight:600;font-size:0.95rem;color:#374151;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='transparent'">🏠 Home</a>
+        <a href="#products" style="padding:10px 14px;border-radius:8px;font-weight:600;font-size:0.95rem;color:#374151;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='transparent'">🍛 Menu</a>
+        <a href="#about"    style="padding:10px 14px;border-radius:8px;font-weight:600;font-size:0.95rem;color:#374151;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='transparent'">ℹ️ About</a>
+        <a href="#faq"      style="padding:10px 14px;border-radius:8px;font-weight:600;font-size:0.95rem;color:#374151;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='transparent'">❓ FAQ</a>
+        <a href="#contact"  style="padding:10px 14px;border-radius:8px;font-weight:600;font-size:0.95rem;color:#374151;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#fef3c7'" onmouseout="this.style.background='transparent'">📞 Contact</a>
+        <hr style="border:none;border-top:1px solid #f3f4f6;margin:4px 0;"/>
+        <a href="tel:+919978349653" style="padding:10px 14px;border-radius:8px;font-weight:700;font-size:0.9rem;color:#b45309;text-decoration:none;background:#fef3c7;">📱 Call: 9978349653</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =======================
+       HERO SECTION (Adjusted image)
+       ======================= -->
+  <main>
+    <section id="home" class="relative bg-yellow-100">
+      <div class="max-w-7xl mx-auto px-3 sm:px-6 py-8 sm:py-12 flex flex-col md:flex-row items-center gap-6 md:gap-8">
+        <!-- Left: Text -->
+        <div class="flex-1 text-center md:text-left">
+          <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-yellow-700 leading-tight">
+            The  Taste of Tradition,<br/>with a Modern Touch.
+          </h1>
+          <p class="mt-3 text-gray-700 text-base sm:text-lg max-w-2xl mx-auto md:mx-0">
+            Freshly cooked Non-Veg, made with premium spices and served with authentic taste — delivered straight to your home. Relish the tradition with a modern twist.
+          </p>
+          <div class="mt-6 flex items-center justify-center md:justify-start gap-3">
+            <a href="#products" class="bg-yellow-600 text-white px-6 py-3 rounded-lg shadow hover:bg-yellow-700 transition focus-ring">Shop Now</a>
+            
+          </div>
+        </div>
+
+        <!-- Right: Controlled Image -->
+        <div class="flex-1 flex justify-center md:justify-end">
+          <img
+            id="heroImage"
+            src="Image/roshan-hero.jpeg"
+            alt="Roshan Restaurant dish"
+            class="rounded-2xl shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg object-cover max-h-72 md:max-h-80"
+            width="720" height="480"
+            loading="eager"
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================
+         PRODUCTS GRID
+         ======================= -->
+    <section id="products" class="max-w-7xl mx-auto px-3 sm:px-6 py-8 sm:py-12">
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-yellow-700 mb-6 sm:mb-10">Menu</h2>
+      <div id="productsGrid" class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 lg:gap-8" aria-live="polite"></div>
+
+      <!-- Extra Categories (expanded to reach 1000+ lines and provide product variety) -->
+      
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================
+         TESTIMONIALS (added)
+         ======================= -->
+    <section id="testimonials" class="bg-white py-12 border-t border-gray-200">
+      <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-yellow-700 text-center mb-8">What Our Customers Say</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <blockquote class="p-6 bg-yellow-50 rounded-lg">
+            <p class="italic">"Every bite of Roshan Restaurant feels like home — tender, spicy, and unforgettable."</p>
+            <footer class="mt-4 text-sm font-semibold">— Dilip K.</footer>
+          </blockquote>
+          <blockquote class="p-6 bg-yellow-50 rounded-lg">
+            <p class="italic">"Fresh ingredients and fast delivery. Highly recommended!"</p>
+            <footer class="mt-4 text-sm font-semibold">— Rajesh P.</footer>
+          </blockquote>
+          <blockquote class="p-6 bg-yellow-50 rounded-lg">
+            <p class="italic">"Loved the Mutton Curry — tender pieces & rich gravy in every bite."</p>
+            <footer class="mt-4 text-sm font-semibold">— Anjali S.</footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================
+         ABOUT & CONTACT
+         ======================= -->
+    <section id="about" class="max-w-7xl mx-auto px-6 py-10 border-t border-gray-200">
+      <div class="md:flex gap-8 items-center">
+        <div class="md:w-1/2">
+          <img src="Image/thumbnail.jpg" alt="About Roshan Restaurant" class="rounded-2xl shadow-lg w-full object-cover h-64" />
+        </div>
+        <div class="md:w-1/2">
+          <h3 class="text-3xl font-bold text-yellow-700 mb-3">About Roshan Restaurant</h3>
+          <p class="text-gray-700 mb-2">Roshan Restaurant started with a love for authentic flavors. For the last 15 years, we’ve been serving freshly cooked non-veg dishes made with premium spices and the finest ingredients.</p>
+          <p class="text-gray-700">We believe food is more than just a meal — it’s comfort, it’s tradition, and it’s pride. That’s why every dish we serve carries the same homely taste our customers have trusted for years.”</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================
+         FAQ (accordion)
+         ======================= -->
+    <section id="faq" class="max-w-7xl mx-auto px-6 py-12 bg-yellow-50 border-t border-gray-200">
+      <h2 class="text-3xl font-bold text-yellow-700 text-center mb-8">Frequently Asked Questions</h2>
+      <div class="max-w-4xl mx-auto space-y-3">
+        <details class="bg-white p-4 rounded-lg" open>
+          <summary class="font-semibold cursor-pointer">How long does delivery take?</summary>
+          <p class="mt-2 text-sm text-gray-600">Delivery is typically within 24–48 hours depending on location.</p>
+        </details>
+        <details class="bg-white p-4 rounded-lg">
+          <summary class="font-semibold cursor-pointer">Do you accept COD?</summary>
+          <p class="mt-2 text-sm text-gray-600">Yes — Cash on Delivery is available. We also support bank transfers and UPI.</p>
+        </details>
+        <details class="bg-white p-4 rounded-lg">
+          <summary class="font-semibold cursor-pointer">Can I order in bulk for events?</summary>
+          <p class="mt-2 text-sm text-gray-600">Yes — contact us on WhatsApp at 9978349653 for bulk orders and discounts.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- =======================
+         NEWSLETTER SIGNUP (demo)
+         ======================= -->
+   
+    <section id="contact" class="bg-yellow-50 py-10 border-t border-gray-200">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <h4 class="text-3xl font-bold text-yellow-700 mb-6">Contact Us</h4>
+        <p class="text-gray-700 mb-1">📍 Jam Khambhaliya, Gujarat</p>
+        <p class="text-gray-700">📧 sumarpupar@gmail.com</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- =======================
+       FOOTER
+       ======================= -->
+  <footer class="bg-yellow-600 text-white py-6 border-t border-gray-300 mt-8">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
+      <p>&copy; <span id="year"></span>Roshan Restaurant. Taste Redefined.</p>
+      
+    </div>
+  </footer>
+
+  <!-- =======================
+       CART SIDEBAR
+       ======================= -->
+  <aside id="cartSidebar" class="fixed top-0 right-0 w-full sm:w-96 max-w-full h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 p-4 sm:p-6 z-[50] flex flex-col" aria-hidden="true">
+    <div class="flex justify-between items-center mb-4 border-b pb-3">
+      <h3 class="text-xl font-bold text-yellow-700">Your Cart</h3>
+      <button onclick="toggleCart()" aria-label="Close cart" class="text-gray-500 hover:text-red-500 text-2xl font-bold">&times;</button>
+    </div>
+
+    <ul id="cartItems" class="space-y-3 flex-1 overflow-y-auto no-scrollbar" aria-live="polite"></ul>
+
+    <div class="mt-4 border-t pt-4">
+      <div class="flex justify-between text-sm text-gray-600 mb-1">
+        <span>Subtotal:</span>
+        <span id="cartSubtotal">₹0</span>
+      </div>
+      <div class="flex justify-between text-sm text-gray-600 mb-3">
+        <span>Shipping:</span>
+        <span id="cartShipping">₹0</span>
+      </div>
+      <div class="flex justify-between font-semibold text-lg mb-3">
+        <span>Total:</span>
+        <span id="cartTotal">₹0</span>
+      </div>
+      <div class="flex gap-3">
+        <button id="checkoutBtn" onclick="beginCheckout()" class="w-full bg-yellow-600 text-white py-2 rounded-lg shadow hover:bg-yellow-700 transition focus-ring">Checkout</button>
+        <button id="clearCartBtn" class="w-20 bg-gray-100 rounded flex items-center justify-center hover:bg-gray-200" title="Clear cart">🧹</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =======================
+       CHECKOUT FORM SIDEBAR
+       ======================= -->
+  <aside id="checkoutForm" class="fixed top-0 right-0 w-full sm:w-96 max-w-full h-full bg-white shadow-lg transform translate-x-full transition-transform duration-300 p-4 sm:p-6 z-[60]" aria-hidden="true">
+    <div class="flex items-center justify-between gap-3 mb-4 border-b pb-3">
+      <button id="checkoutBackBtn" type="button" aria-label="Back to cart" class="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium hover:bg-gray-100 focus-ring">
+        <span aria-hidden="true">&larr;</span>
+        <span>Back</span>
+      </button>
+      <h3 class="text-lg sm:text-xl font-bold text-yellow-700 text-center">Delivery Details</h3>
+      <button id="checkoutCloseBtn" type="button" aria-label="Close checkout" class="w-10 h-10 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-red-500 text-2xl font-bold focus-ring">&times;</button>
+    </div>
+
+    <form id="orderForm" class="space-y-4" novalidate>
+      <div>
+        <label for="custName" class="block text-sm font-medium text-gray-700">Name</label>
+        <input id="custName" type="text" required class="mt-1 block w-full rounded-lg border px-3 py-2 focus-ring" placeholder="Full name" />
+        <p id="custNameError" class="text-xs text-red-500 mt-1 hidden">Please enter your name.</p>
+      </div>
+
+      <div>
+        <label for="custMobile" class="block text-sm font-medium text-gray-700">Mobile</label>
+        <input id="custMobile" type="tel" pattern="[0-9]{10}" maxlength="10" required class="mt-1 block w-full rounded-lg border px-3 py-2 focus-ring" placeholder="10 digit mobile" />
+        <p id="custMobileError" class="text-xs text-red-500 mt-1 hidden">Enter a valid 10-digit mobile number.</p>
+      </div>
+
+      <div>
+        <label for="custAddress" class="block text-sm font-medium text-gray-700">Address</label>
+        <textarea id="custAddress" rows="3" required class="mt-1 block w-full rounded-lg border px-3 py-2 focus-ring" placeholder="Enter Your Address In Khambhaliya"></textarea>
+        <p id="custAddressError" class="text-xs text-red-500 mt-1 hidden">Please enter delivery address.</p>
+      </div>
+
+      <div>
+        <!-- SAVE & CONTINUE -> we will open WhatsApp summary instead of payment -->
+        <button id="saveContinueBtn" type="submit" class="w-full bg-yellow-600 text-white py-2 rounded-lg shadow hover:bg-yellow-700 focus-ring">Save & Continue</button>
+      </div>
+    </form>
+  </aside>
+
+  <!-- =======================
+       WHATSAPP SUMMARY PAGE (replaces payment modal/page)
+       - This page shows order summary, Back option and "Send to WhatsApp"
+       - Back returns to checkout form (so user can edit)
+       ======================= -->
+  <div id="whatsappPage" class="fixed inset-0 bg-black/60 hidden z-[80] flex items-center justify-center p-4" aria-hidden="true">
+    <div class="bg-white rounded-lg max-w-md w-full p-6 text-center">
+      <h3 id="waTitle" class="text-xl font-bold text-yellow-700 mb-4">Send Order via WhatsApp</h3>
+      <p id="waSummary" class="text-gray-700 mb-4"></p>
+
+      <div class="space-y-3">
+        <button id="sendWhatsAppBtn" class="w-full py-2 rounded whatsapp-btn text-white">Send to WhatsApp</button>
+        <!-- Back button to go back to checkout form so user can edit details -->
+        <button id="backToCheckoutBtn" class="w-full py-2 rounded border">Back</button>
+      </div>
+
+      <p class="text-sm text-gray-500 mt-3">This will open WhatsApp on your device. We will mark the order as sent via WhatsApp.</p>
+    </div>
+  </div>
+
+  <!-- =======================
+       ORDER SUCCESS & HISTORY
+       ======================= -->
+  <div id="orderSuccess" class="fixed inset-0 bg-black/60 hidden z-[90] flex items-center justify-center p-4" aria-hidden="true">
+    <div class="bg-white rounded-lg max-w-md w-full p-6 text-center">
+      <h3 class="text-2xl font-bold text-yellow-700 mb-3">Order Sent ✅</h3>
+      <p id="orderSuccessMsg" class="text-gray-700 mb-4"></p>
+      <div class="flex justify-center gap-3">
+        <button onclick="closeSuccess()" class="bg-yellow-600 text-white px-6 py-2 rounded">OK</button>
+        <button onclick="openOrderHistory()" class="px-6 py-2 rounded border">View Orders</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order History Modal -->
+  <div id="historyModal" class="fixed inset-0 bg-black/60 hidden z-[95] flex items-center justify-center p-4" aria-hidden="true">
+    <div class="bg-white rounded-lg max-w-3xl w-full p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-yellow-700">Order History</h3>
+        <div class="flex gap-2 items-center">
+          <button onclick="clearOrders()" class="px-3 py-1 rounded bg-red-600 text-white">Clear All</button>
+          <button onclick="closeOrderHistory()" class="px-3 py-1 rounded border">Close</button>
+        </div>
+      </div>
+      <div id="ordersList" class="space-y-4 max-h-96 overflow-y-auto no-scrollbar"></div>
+      <p id="noOrdersMsg" class="text-gray-500 mt-4 hidden">No orders yet.</p>
+    </div>
+  </div>
+
+  <!-- =======================
+       LOADING SPINNER (demo)
+       ======================= -->
+  <div id="loadingSpinner" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/20">
+    <div class="rounded-full p-4 bg-white shadow">
+      <svg class="animate-spin h-8 w-8 text-yellow-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- =======================
+       SCRIPTS: Cart, Checkout, WhatsApp Flow
+       ======================= -->
+  <script>
+    /* ==============================
+       AUTHENTICATION SETUP
+       ============================== */
+    
+    // Initialize admin user on first load
+    function initializeAdminUser() {
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (!users['admin@roshan.com']) {
+        users['admin@roshan.com'] = {
+          mobile: '9978349653',
+          email: 'admin@roshan.com',
+          password: btoa('roshan321'),
+          createdAt: new Date().toISOString(),
+          isAdmin: true
+        };
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+    }
+    
+    initializeAdminUser();
+
+    // Check current user status
+    function getCurrentUser() {
+      return JSON.parse(localStorage.getItem('currentUser') || 'null');
+    }
+
+    // Update UI based on login status
+    function updateAuthUI() {
+      const currentUser = getCurrentUser();
+      const userSection = document.getElementById('userSection');
+      const userProfile = document.getElementById('userProfile');
+      const userName = document.getElementById('userName');
+      const userEmail = document.getElementById('userEmail');
+      const loginBtn = document.getElementById('loginBtn');
+      const registerBtn = document.getElementById('registerBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
+      const cartBtn = document.getElementById('cartBtn');
+      const adminLink = document.querySelector('nav a[href="#admin"]');
+
+      if (currentUser) {
+        userSection.classList.add('hidden');
+        userProfile.classList.remove('hidden');
+        userName.textContent = currentUser.mobile || currentUser.email;
+        userEmail.textContent = currentUser.email || '';
+
+        // Show admin link if user is admin
+        if (currentUser.isAdmin && adminLink) {
+          adminLink.classList.remove('hidden');
+        }
+      } else {
+        userSection.classList.remove('hidden');
+        userProfile.classList.add('hidden');
+      }
+    }
+
+    // Login/Logout button handlers
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+
+    document.getElementById('registerBtn').addEventListener('click', () => {
+      window.location.href = 'register.html';
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('currentUser');
+        updateAuthUI();
+        alert('Logged out successfully');
+      }
+    });
+
+    // Update UI on page load
+    updateAuthUI();
+
+    /* ==============================
+       END AUTHENTICATION SETUP
+       ============================== */
+
+    /* ------------------------------
+       Utilities & Persistent Storage
+       ------------------------------ */
+    const STORAGE = {
+      CART: 'gb_cart_v1',
+      ADDRESS: 'gb_address_v1',
+      ORDERS: 'gb_orders_v1',
+      PENDING: 'gb_pending_v1',
+      PRODUCTS: 'rr_products_v1',
+      PRODUCTS_UPDATED: 'rr_products_updated_at'
+    };
+
+    const BACKEND_AVAILABLE = window.location.protocol.startsWith('http');
+    const PRODUCTS_API = '/api/products';
+
+    function save(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+    function load(key) {
+      try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; }
+    }
+    function formatCurrency(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+    function uid(prefix='ID'){ return prefix + '-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2,8); }
+    const SHIPPING_CHARGE = 50;
+
+    function productImage(name, from, to) {
+      const safeName = String(name).replace(/[&<>"']/g, '');
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="${from}"/>
+              <stop offset="1" stop-color="${to}"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="600" rx="34" fill="url(#g)"/>
+          <circle cx="400" cy="270" r="132" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="400" cy="270" r="96" fill="rgba(251,191,36,0.28)"/>
+          <path d="M280 420c90 42 150 42 240 0" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="18" stroke-linecap="round"/>
+          <text x="400" y="502" fill="white" font-family="Arial, sans-serif" font-size="52" font-weight="700" text-anchor="middle">${safeName}</text>
+        </svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    /* ------------------------------
+       Initial Data (Products)
+       ------------------------------ */
+    const DEFAULT_PRODUCTS = [
+      { id: 'p1',  name: 'Gravy Chicken',  price: 200, desc: 'Made with homely taste & restaurant-style flavor',         img: 'Image/chicken-gravy-1.webp' },
+      { id: 'p2',  name: 'Gravy Mutton',   price: 250, desc: 'Loaded with tender mutton & rich spices',                  img: 'Image/mutton-500x500.webp' },
+      { id: 'p3',  name: 'Jinga',          price: 200, desc: 'Ocean’s freshness cooked with authentic masala',          img: 'Image/Prawn-Biryani-Recipe-480x270.webp' },
+      // Extra products to make the store feel complete
+      { id: 'p4',  name: 'Fish',           price: 200, desc: 'Ocean Fresh Flavor',                                       img: 'Image/Fish-Curry-4.jpg' },
+      { id: 'p5',  name: 'Chicken Biryani',price: 220, desc: 'Chicken Biryani — Tradition Served Hot',                  img: 'Image/Boneless-Chicken-Biryani-Meghanas-2-500x500.jpg' },
+      { id: 'p6',  name: 'Mutton Biryani', price: 280, desc: 'Mutton Biryani — A taste of royal tradition',             img: 'Image/Mutton-Masala-min.jpg' },
+      { id: 'p7',  name: 'Jinga Biryani',  price: 250, desc: 'Jinga Biryani — Coastal freshness meets royal spice',     img: 'Image/Prawn-Biryani-Recipe-480x270.webp' },
+      { id: 'p9',  name: 'Fish Biryani',   price: 250, desc: 'Fish Biryani — Coastal taste with royal spice',           img: 'Image/Fish-Masala1_1200x.jpg' },
+      { id: 'p10', name: 'Chicken Masala', price: 220, desc: 'Every bite bursting with masala magic',                   img: 'Image/GrChicken-Masala-Curryoup-1.jpg' },
+      { id: 'p11', name: 'Mutton Masala',  price: 300, desc: 'Mutton Masala — Spiced with tradition, served with love', img: 'Image/Mutton-Masala-min.jpg' },
+      { id: 'p12', name: 'Jinga Masala',   price: 250, desc: 'Jinga Masala — Ocean freshness with desi spices',        img: 'Image/Prawn-Biryani-Recipe-480x270.webp' },
+      { id: 'p13', name: 'Fish Masala',    price: 250, desc: 'Fish Masala — Ocean flavor with desi spice',              img: 'Image/Fish-Masala1_1200x.jpg' },
+      { id: 'p14', name: 'Rotla',          price: 25,  desc: 'Soft, fresh & homely — just like Ghar ka Rotla',         img: 'Image/Bajri-Rotla-Kutch.png' },
+      { id: 'p15', name: 'Rotli',          price: 15,  desc: 'Soft & fresh Rotli — the soul of every meal',            img: 'Image/roti.jpg' }
+
+    ];
+    let products = [];
+    initProducts();
+
+    async function initProducts() {
+      products = await loadProducts();
+      renderProducts();
+    }
+
+    function parsePrice(value) {
+      const cleaned = String(value || '').replace(/[^\d.]/g, '');
+      const amount = Number(cleaned);
+      return Number.isFinite(amount) ? Math.round(amount) : 0;
+    }
+
+    function normalizeImage(value, name, index) {
+      const img = String(value || '').trim();
+      if (img.startsWith('data:image/') || img.startsWith('http://') || img.startsWith('https://')) return img;
+      if (img) {
+        if (!img.startsWith('Image/') && !img.startsWith('/') && !img.includes('://')) {
+          return `Image/${img}`;
+        }
+        return img;
+      }
+      const palette = [
+        ['#f97316', '#991b1b'],
+        ['#dc2626', '#7f1d1d'],
+        ['#0ea5e9', '#155e75'],
+        ['#14b8a6', '#115e59'],
+        ['#f59e0b', '#92400e'],
+        ['#b45309', '#78350f']
+      ];
+      const colors = palette[index % palette.length];
+      return productImage(name || 'Product', colors[0], colors[1]);
+    }
+
+    function normalizeProducts(list) {
+      return list.map((product, index) => ({
+        id: String(product.id || `p-${Date.now()}-${index}`),
+        name: String(product.name || '').trim(),
+        price: parsePrice(product.price),
+        desc: String(product.desc || '').trim(),
+        img: normalizeImage(product.img, product.name, index)
+      })).filter((product) => product.name && product.price > 0);
+    }
+
+    async function loadProducts() {
+      if (BACKEND_AVAILABLE) {
+        try {
+          const response = await fetch(PRODUCTS_API);
+          if (response.ok) {
+            const data = await response.json();
+            return normalizeProducts(Array.isArray(data) && data.length ? data : DEFAULT_PRODUCTS);
+          }
+        } catch (error) {
+          console.warn('Backend products fetch failed', error);
+        }
+      }
+      const savedProducts = load(STORAGE.PRODUCTS);
+      return normalizeProducts(Array.isArray(savedProducts) && savedProducts.length ? savedProducts : DEFAULT_PRODUCTS);
+    }
+
+    async function refreshProducts() {
+      products = await loadProducts();
+      syncCartWithProducts();
+      renderProducts();
+      updateCart();
+    }
+
+    // Listen for admin updates
+    const productChannel = 'BroadcastChannel' in window ? new BroadcastChannel('rr_products_channel') : null;
+    productChannel?.addEventListener('message', () => { refreshProducts(); });
+
+    /* ------------------------------
+       State
+       ------------------------------ */
+    let cart = load(STORAGE.CART) || [];                      // array of {id,name,price,qty}
+    let lastAddress = load(STORAGE.ADDRESS) || null;          // {name,mobile,address}
+    let pendingOrder = load(STORAGE.PENDING) || null;         // saved while awaiting whatsapp send
+    let orders = load(STORAGE.ORDERS) || [];                  // completed orders
+
+    /* ------------------------------
+       DOM Refs
+       ------------------------------ */
+    const productsGrid = document.getElementById('productsGrid');
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartCountEl = document.getElementById('cartCount');
+    const cartSubtotalEl = document.getElementById('cartSubtotal');
+    const cartShippingEl = document.getElementById('cartShipping');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const cartSidebar = document.getElementById('cartSidebar');
+    const checkoutBackBtn = document.getElementById('checkoutBackBtn');
+    const checkoutCloseBtn = document.getElementById('checkoutCloseBtn');
+    const mobileNav = document.getElementById('mobileNav');
+    const yearSpan = document.getElementById('year');
+
+    const orderForm = document.getElementById('orderForm');
+    const checkoutForm = document.getElementById('checkoutForm');
+
+    const whatsappPage = document.getElementById('whatsappPage');
+    const waTitle = document.getElementById('waTitle');
+    const waSummary = document.getElementById('waSummary');
+    const sendWhatsAppBtn = document.getElementById('sendWhatsAppBtn');
+    const backToCheckoutBtn = document.getElementById('backToCheckoutBtn');
+
+    const orderSuccess = document.getElementById('orderSuccess');
+    const orderSuccessMsg = document.getElementById('orderSuccessMsg');
+
+    const historyModal = document.getElementById('historyModal');
+    const ordersList = document.getElementById('ordersList');
+    const noOrdersMsg = document.getElementById('noOrdersMsg');
+
+    const loadingSpinner = document.getElementById('loadingSpinner');
+
+    /* ------------------------------
+       Init UI
+       ------------------------------ */
+    yearSpan.textContent = new Date().getFullYear();
+
+    function renderProducts() {
+      productsGrid.innerHTML = '';
+      products.forEach(p => {
+        const card = document.createElement('article');
+        card.className = 'product-card bg-white rounded-2xl shadow hover:shadow-xl transition p-4 flex flex-col';
+        card.innerHTML = `
+          <img src="${p.img}" alt="${p.name}" class="rounded-lg mb-4 object-cover h-52 w-full" loading="lazy" onerror="this.src=productImage('${escapeHtml(p.name)}', '#f59e0b', '#92400e')"/>
+          <h3 class="product-title text-xl font-semibold">${p.name}</h3>
+          <p class="product-desc text-gray-600 mb-2">${p.desc}</p>
+          <div class="product-actions mt-auto flex items-center justify-between gap-2">
+            <div class="text-yellow-700 font-bold text-base sm:text-lg">${formatCurrency(p.price)}</div>
+            <div class="buy-actions flex gap-3 sm:gap-4">
+              <button class="hidden sm:inline-flex bg-gray-100 px-3 py-1 rounded text-sm" aria-label="View details">Details</button>
+              <button class="shop-btn add-btn text-white px-3 sm:px-5 py-2 focus-ring text-sm sm:text-base" aria-label="Add ${p.name} to cart">
+                <span class="inline-flex items-center justify-center gap-1.5">
+                  <span aria-hidden="true">+</span>
+                  <span>Add</span>
+                </span>
+              </button>
+              <button class="shop-btn buy-btn text-white px-3 sm:px-5 py-2 focus-ring text-sm sm:text-base" aria-label="Buy ${p.name} now">
+                <span class="inline-flex items-center justify-center gap-1.5">
+                  <span>Buy</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </span>
+              </button>
+            </div>
+          </div>
+        `;
+        card.querySelectorAll('button')[1].addEventListener('click', () => { addToCart(p.id); });
+        card.querySelectorAll('button')[2].addEventListener('click', () => { buyNow(p.id); });
+        productsGrid.appendChild(card);
+      });
+    }
+
+    /* ------------------------------
+       Cart helpers
+       ------------------------------ */
+    function persistCart() { save(STORAGE.CART, cart); }
+    function persistAddress() { if (lastAddress) save(STORAGE.ADDRESS, lastAddress); }
+    function persistOrders() { save(STORAGE.ORDERS, orders); }
+    function persistPending() { if (pendingOrder) save(STORAGE.PENDING, pendingOrder); else localStorage.removeItem(STORAGE.PENDING); }
+
+    function findProduct(pid) { return products.find(p => p.id === pid); }
+
+    function syncCartWithProducts() {
+      let changed = false;
+      cart = cart.reduce((items, item) => {
+        const product = findProduct(item.id);
+        if (!product) {
+          changed = true;
+          return items;
+        }
+
+        const syncedItem = {
+          ...item,
+          name: product.name,
+          price: product.price
+        };
+
+        if (syncedItem.name !== item.name || syncedItem.price !== item.price) changed = true;
+        items.push(syncedItem);
+        return items;
+      }, []);
+
+      if (changed) persistCart();
+    }
+
+    function addToCart(productId) {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        alert('Please login first to add items to cart');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const p = findProduct(productId);
+      if (!p) return;
+      const existing = cart.find(i => i.id === productId);
+      if (existing) existing.qty += 1;
+      else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+      persistCart();
+      updateCart();
+      openCart();
+      announce(`${p.name} added to cart`);
+    }
+
+    function buyNow(productId) {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        alert('Please login first to make a purchase');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      const p = findProduct(productId);
+      if (!p) return;
+      const existing = cart.find(i => i.id === productId);
+      if (existing) existing.qty += 1;
+      else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+      persistCart();
+      updateCart();
+      announce(`${p.name} ready for checkout`);
+      beginCheckout();
+    }
+
+    function changeQty(index, delta) {
+      if (!cart[index]) return;
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) cart.splice(index, 1);
+      persistCart();
+      updateCart();
+    }
+
+    function removeItem(index) {
+      if (!cart[index]) return;
+      cart.splice(index, 1);
+      persistCart();
+      updateCart();
+    }
+
+    function clearCart() {
+      cart = [];
+      persistCart();
+      updateCart();
+      announce('Cart cleared');
+    }
+
+    function computeSubtotal() { return cart.reduce((s, i) => s + (i.price * i.qty), 0); }
+    function computeShipping() { return cart.length > 0 ? SHIPPING_CHARGE : 0; }
+    function computeTotal() { return computeSubtotal() + computeShipping(); }
+
+    function updateCart() {
+      const totalQty = cart.reduce((s,i)=> s + i.qty, 0);
+      cartCountEl.textContent = totalQty;
+      cartItemsEl.innerHTML = '';
+
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = `<p class="text-yellow-600 font-bold text-center mt-10 text-lg animate-bounce">ORDER NOW!!</p>`;
+      } else {
+        cart.forEach((item, idx) => {
+          const li = document.createElement('li');
+          li.className = 'flex justify-between items-center border-b pb-2';
+          li.innerHTML = `
+            <div>
+              <div class="font-medium">${escapeHtml(item.name)}</div>
+              <div class="text-sm text-gray-500">${formatCurrency(item.price)} × ${item.qty} = ${formatCurrency(item.qty * item.price)}</div>
+            </div>
+            <div class="flex items-center gap-2">
+              <button aria-label="Decrease quantity" class="px-2 py-1 text-sm border rounded">−</button>
+              <div class="px-2">${item.qty}</div>
+              <button aria-label="Increase quantity" class="px-2 py-1 text-sm border rounded">+</button>
+              <button aria-label="Remove item" class="text-red-500 ml-2 font-bold">✕</button>
+            </div>
+          `;
+          const buttons = li.querySelectorAll('button');
+          buttons[0].addEventListener('click', () => changeQty(idx, -1));
+          buttons[1].addEventListener('click', () => changeQty(idx, +1));
+          buttons[2].addEventListener('click', () => removeItem(idx));
+          cartItemsEl.appendChild(li);
+        });
+      }
+
+      cartSubtotalEl.textContent = formatCurrency(computeSubtotal());
+      cartShippingEl.textContent = formatCurrency(computeShipping());
+      cartTotalEl.textContent = formatCurrency(computeTotal());
+    }
+
+    /* ------------------------------
+       Accessibility announce
+       ------------------------------ */
+    function announce(text) {
+      let el = document.getElementById('srAnnounce');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'srAnnounce';
+        el.setAttribute('aria-live', 'polite');
+        el.className = 'sr-only';
+        document.body.appendChild(el);
+      }
+      el.textContent = text;
+    }
+
+    /* ------------------------------
+       Cart / Sidebar controls
+       ------------------------------ */
+    function toggleCart() {
+      const hidden = cartSidebar.classList.toggle('translate-x-full');
+      const ariaHidden = cartSidebar.getAttribute('aria-hidden') === 'true';
+      cartSidebar.setAttribute('aria-hidden', !ariaHidden);
+    }
+    function openCart() {
+      cartSidebar.classList.remove('translate-x-full');
+      cartSidebar.setAttribute('aria-hidden', 'false');
+    }
+
+    document.getElementById('clearCartBtn').addEventListener('click', () => {
+      if (confirm('Clear the cart?')) clearCart();
+    });
+
+    document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+      mobileNav.classList.toggle('hidden');
+    });
+
+    document.getElementById('cartBtn').addEventListener('click', toggleCart);
+    checkoutBackBtn.addEventListener('click', backToCart);
+    checkoutCloseBtn.addEventListener('click', closeCheckoutForm);
+
+    /* ------------------------------
+       Checkout Flow (modified)
+       - On submit we open the whatsappPage (summary)
+       - Back button returns to checkout form (so user can edit)
+       - Send to WhatsApp opens wa.me link to your number with formatted message
+       - After sending we mark order in orders[] with status "Sent via WhatsApp"
+       ------------------------------ */
+
+    function beginCheckout() {
+      const currentUser = getCurrentUser();
+      if (!currentUser) {
+        alert('Please login to proceed with checkout');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      if (cart.length === 0) { alert('Your cart is empty — please add items first.'); return; }
+      syncCartWithProducts();
+      updateCart();
+      if (lastAddress) {
+        document.getElementById('custName').value = lastAddress.name || '';
+        document.getElementById('custMobile').value = lastAddress.mobile || '';
+        document.getElementById('custAddress').value = lastAddress.address || '';
+      } else {
+        document.getElementById('custName').value = '';
+        document.getElementById('custMobile').value = '';
+        document.getElementById('custAddress').value = '';
+      }
+      cartSidebar.classList.add('translate-x-full');
+      checkoutForm.classList.remove('translate-x-full');
+      checkoutForm.setAttribute('aria-hidden', 'false');
+    }
+    function closeCheckoutForm() {
+      checkoutForm.classList.add('translate-x-full');
+      checkoutForm.setAttribute('aria-hidden', 'true');
+    }
+
+    function backToCart() {
+      closeCheckoutForm();
+      openCart();
+    }
+
+    function validateName(name) { return typeof name === 'string' && name.trim().length >= 2; }
+    function validateMobile(mobile) { return /^[6-9][0-9]{9}$/.test(mobile); }
+    function validateAddress(addr) { return typeof addr === 'string' && addr.trim().length >= 6; }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, function (m) {
+        return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'})[m];
+      });
+    }
+
+    // Order form submit -> create pendingOrder and open whatsappPage
+    orderForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('custName').value.trim();
+      const mobile = document.getElementById('custMobile').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+
+      document.getElementById('custNameError').classList.add('hidden');
+      document.getElementById('custMobileError').classList.add('hidden');
+      document.getElementById('custAddressError').classList.add('hidden');
+
+      let ok = true;
+      if (!validateName(name)) { document.getElementById('custNameError').classList.remove('hidden'); ok = false; }
+      if (!validateMobile(mobile)) { document.getElementById('custMobileError').classList.remove('hidden'); ok = false; }
+      if (!validateAddress(address)) { document.getElementById('custAddressError').classList.remove('hidden'); ok = false; }
+      if (!ok) { announce('Please correct the highlighted fields.'); return; }
+
+      // save address for next time
+      lastAddress = { name, mobile, address };
+      persistAddress();
+
+      // create pending order record (we will send this via WhatsApp)
+      pendingOrder = {
+        id: uid('ORD'),
+        createdAt: new Date().toISOString(),
+        items: cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty })),
+        subtotal: computeSubtotal(),
+        shipping: computeShipping(),
+        total: computeTotal(),
+        customer: { name, mobile, address }
+      };
+      persistPending();
+
+      // close checkout form and open whatsapp summary page
+      closeCheckoutForm();
+      openWhatsAppPage();
+    });
+
+    function openWhatsAppPage() {
+      if (!pendingOrder) { alert('No order to send.'); return; }
+      // Prepare summary content
+      waTitle.textContent = 'Send Order via WhatsApp';
+      const created = new Date(pendingOrder.createdAt).toLocaleString();
+      let summary = `<strong>Order ID:</strong> ${escapeHtml(pendingOrder.id)}<br/>`;
+      summary += `<strong>Date:</strong> ${created}<br/>`;
+      summary += `<strong>Customer:</strong> ${escapeHtml(pendingOrder.customer.name)} • ${escapeHtml(pendingOrder.customer.mobile)}<br/>`;
+      summary += `<strong>Address:</strong> ${escapeHtml(pendingOrder.customer.address).replace(/\n/g,'<br/>')}<br/><br/>`;
+      summary += `<strong>Items:</strong><br/>`;
+      summary += pendingOrder.items.map(it => `${escapeHtml(it.name)} × ${it.qty} = ${formatCurrency(it.qty * it.price)}`).join('<br/>');
+      summary += `<br/><br/><strong>Subtotal:</strong> ${formatCurrency(pendingOrder.subtotal || (pendingOrder.total - (pendingOrder.shipping || SHIPPING_CHARGE)))}`;
+      summary += `<br/><strong>Shipping:</strong> ${formatCurrency(pendingOrder.shipping || SHIPPING_CHARGE)}`;
+      summary += `<br/><br/><strong>Total:</strong> ${formatCurrency(pendingOrder.total)}`;
+      waSummary.innerHTML = summary;
+
+      whatsappPage.classList.remove('hidden');
+      whatsappPage.classList.add('flex');
+      whatsappPage.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeWhatsAppPage() {
+      whatsappPage.classList.add('hidden');
+      whatsappPage.classList.remove('flex');
+      whatsappPage.setAttribute('aria-hidden', 'true');
+    }
+
+    // Back button - return to checkout form so user can edit
+    backToCheckoutBtn.addEventListener('click', () => {
+      closeWhatsAppPage();
+      // re-open checkout form prefilled
+      if (pendingOrder && pendingOrder.customer) {
+        document.getElementById('custName').value = pendingOrder.customer.name || '';
+        document.getElementById('custMobile').value = pendingOrder.customer.mobile || '';
+        document.getElementById('custAddress').value = pendingOrder.customer.address || '';
+      }
+      checkoutForm.classList.remove('translate-x-full');
+      checkoutForm.setAttribute('aria-hidden', 'false');
+    });
+
+    // Send to WhatsApp: open wa.me link with formatted message and save order as "Sent via WhatsApp"
+    sendWhatsAppBtn.addEventListener('click', () => {
+      if (!pendingOrder) { alert('No order to send.'); return; }
+      // Build message text (URL encoded)
+      let msg = `*New Order Received*%0A`;
+      msg += `Order ID: ${encodeURIComponent(pendingOrder.id)}%0A`;
+      msg += `Date: ${encodeURIComponent(new Date(pendingOrder.createdAt).toLocaleString())}%0A%0A`;
+      msg += `*Customer*%0AName: ${encodeURIComponent(pendingOrder.customer.name)}%0A`;
+      msg += `Mobile: ${encodeURIComponent(pendingOrder.customer.mobile)}%0A`;
+      msg += `Address: ${encodeURIComponent(pendingOrder.customer.address)}%0A%0A`;
+      msg += `*Items*%0A`;
+      pendingOrder.items.forEach(it => {
+        msg += `${encodeURIComponent(it.name)} × ${it.qty} = ${encodeURIComponent(formatCurrency(it.qty * it.price))}%0A`;
+      });
+      msg += `%0ASubtotal: ${encodeURIComponent(formatCurrency(pendingOrder.subtotal || (pendingOrder.total - (pendingOrder.shipping || SHIPPING_CHARGE))))}%0A`;
+      msg += `Shipping: ${encodeURIComponent(formatCurrency(pendingOrder.shipping || SHIPPING_CHARGE))}%0A`;
+      msg += `%0A*Total:* ${encodeURIComponent(formatCurrency(pendingOrder.total))}%0A%0A`;
+      msg += `-- Roshan Restaurant`;
+
+      // Your WhatsApp number (with country code). Provided: 9978349653 -> include +91
+      const whatsappNumber = "919978349653";
+      const waUrl = `https://wa.me/${whatsappNumber}?text=${msg}`;
+
+      // Show small loading spinner briefly
+      loadingSpinner.classList.remove('hidden');
+      loadingSpinner.classList.add('flex');
+
+      // Open new tab and then update order status locally
+      setTimeout(() => {
+        window.open(waUrl, '_blank');
+
+        // mark order as sent via WhatsApp and move to orders history
+        const completed = {
+          ...pendingOrder,
+          paymentMethod: 'WhatsApp',
+          status: 'Sent via WhatsApp',
+          completedAt: new Date().toISOString()
+        };
+        orders.push(completed);
+        persistOrders();
+
+        // clear cart & pending
+        cart = [];
+        persistCart();
+        pendingOrder = null;
+        persistPending();
+
+        updateCart();
+
+        loadingSpinner.classList.add('hidden');
+        loadingSpinner.classList.remove('flex');
+
+        closeWhatsAppPage();
+
+        // show success modal
+        orderSuccessMsg.innerHTML = `Order <strong>${escapeHtml(completed.id)}</strong> details have been opened in WhatsApp.<br/>Shipping: <strong>${formatCurrency(completed.shipping || SHIPPING_CHARGE)}</strong><br/>Total: <strong>${formatCurrency(completed.total)}</strong><br/>We marked the order as <strong>Sent via WhatsApp</strong>.`;
+        orderSuccess.classList.remove('hidden');
+        orderSuccess.style.display = 'flex';
+        orderSuccess.setAttribute('aria-hidden', 'false');
+        announce('Order details sent to WhatsApp.');
+      }, 800);
+    });
+
+    function closeSuccess() {
+      orderSuccess.classList.add('hidden');
+      orderSuccess.style.display = 'none';
+      orderSuccess.setAttribute('aria-hidden', 'true');
+    }
+
+    /* ------------------------------
+       Order History modal functions
+       ------------------------------ */
+    document.getElementById('historyBtn').addEventListener('click', openOrderHistory);
+
+    function openOrderHistory() {
+      historyModal.classList.remove('hidden');
+      historyModal.classList.add('flex');
+      historyModal.setAttribute('aria-hidden', 'false');
+      renderOrdersList();
+    }
+    function closeOrderHistory() {
+      historyModal.classList.add('hidden');
+      historyModal.classList.remove('flex');
+      historyModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderOrdersList() {
+      ordersList.innerHTML = '';
+      if (!orders || orders.length === 0) {
+        noOrdersMsg.classList.remove('hidden');
+        ordersList.classList.add('hidden');
+        return;
+      }
+      noOrdersMsg.classList.add('hidden');
+      ordersList.classList.remove('hidden');
+
+      const copy = [...orders].reverse();
+      copy.forEach(o => {
+        const el = document.createElement('div');
+        el.className = 'border rounded p-3';
+        el.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold">Order ${escapeHtml(o.id)}</div>
+              <div class="text-sm text-gray-600">${new Date(o.createdAt).toLocaleString()}</div>
+            </div>
+            <div class="text-yellow-700 font-bold">${formatCurrency(o.total)}</div>
+          </div>
+          <div class="mt-2 text-sm text-gray-700">Payment: ${escapeHtml(o.paymentMethod)} • Status: ${escapeHtml(o.status)}</div>
+          <div class="mt-2 grid grid-cols-2 gap-2 text-sm text-gray-600">
+            <div>Subtotal: <strong>${formatCurrency(o.subtotal || (o.total - (o.shipping || SHIPPING_CHARGE)))}</strong></div>
+            <div>Shipping: <strong>${formatCurrency(o.shipping || SHIPPING_CHARGE)}</strong></div>
+          </div>
+          <div class="mt-2 text-sm">${escapeHtml(o.customer.name)} • ${escapeHtml(o.customer.mobile)}</div>
+          <details class="mt-2">
+            <summary class="cursor-pointer text-sm text-blue-600">View items (${o.items.length})</summary>
+            <ul class="mt-2 text-sm space-y-1">
+              ${o.items.map(it => `<li>${escapeHtml(it.name)} — ${it.qty} × ${formatCurrency(it.price)}</li>`).join('')}
+            </ul>
+          </details>
+        `;
+        ordersList.appendChild(el);
+      });
+    }
+
+    function clearOrders() {
+      if (!confirm('Clear all saved orders? This cannot be undone.')) return;
+      orders = [];
+      persistOrders();
+      renderOrdersList();
+      announce('Order history cleared');
+    }
+
+    /* ------------------------------
+       Misc helpers & bindings
+       ------------------------------ */
+    function persistCart() { save(STORAGE.CART, cart); }
+    function persistPendingOrder() { if (pendingOrder) save(STORAGE.PENDING, pendingOrder); else localStorage.removeItem(STORAGE.PENDING); }
+
+    function escapeHtmlForAttr(s) { return (s+'').replace(/"/g,'&quot;'); }
+
+    // payment modal buttons (kept but we hide them to avoid confusion)
+    if (document.getElementById('payUPI')) {
+      // disable actual payment buttons to honor "no payment option" request
+      document.getElementById('payUPI').style.display = 'none';
+      document.getElementById('payCard').style.display = 'none';
+      document.getElementById('payCOD').style.display = 'none';
+    }
+
+    // wire up initial bindings
+    document.getElementById('payUPI')?.addEventListener('click', () => { closePaymentModal(); openPaymentPage('UPI'); });
+    document.getElementById('payCard')?.addEventListener('click', () => { closePaymentModal(); openPaymentPage('Card'); });
+    document.getElementById('payCOD')?.addEventListener('click', () => { closePaymentModal(); confirmOrder('COD'); });
+
+    // enable history button on small screens too
+    if (document.getElementById('historyBtn')) {
+      document.getElementById('historyBtn').classList.remove('hidden');
+    }
+
+    // initial UI sync
+    (async () => {
+      await initProducts();
+      syncCartWithProducts();
+      updateCart();
+    })();
+
+    // newsletter demo handler
+    document.getElementById('newsletterForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const em = document.getElementById('newsletterEmail').value;
+      if (!em) { alert('Enter an email'); return; }
+      announce('Subscribed to newsletter (demo).');
+      alert('Thank you — demo subscription received.');
+      document.getElementById('newsletterEmail').value = '';
+    });
+
+    // quick keyboard shortcuts (optional for power users)
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'c' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); openCart(); }
+    });
+
+    // small guard: save state on page unload
+    window.addEventListener('beforeunload', () => {
+      persistCart();
+      persistAddress();
+      persistOrders();
+      persistPending();
+    });
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === STORAGE.PRODUCTS || event.key === STORAGE.PRODUCTS_UPDATED) refreshProducts();
+    });
+
+    window.addEventListener('focus', () => {
+      refreshProducts();
+    });
+
+    if ('BroadcastChannel' in window) {
+      const productChannel = new BroadcastChannel('rr_products_channel');
+      productChannel.addEventListener('message', (event) => {
+        if (event.data && event.data.type === 'products-updated') refreshProducts();
+      });
+    }
+
+    /* ------------------------------
+       Dark mode toggle
+       ------------------------------ */
+    const darkToggle = document.getElementById('darkToggle');
+    const savedTheme = localStorage.getItem('rr_theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+      darkToggle.textContent = '☀️ Light';
+    }
+    darkToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark-mode');
+      localStorage.setItem('rr_theme', isDark ? 'dark' : 'light');
+      darkToggle.textContent = isDark ? '☀️ Light' : '🌙 Dark';
+    });
+
+    /* ------------------------------
+       Stubs for removed payment functions (kept for compatibility)
+       ------------------------------ */
+    function openPaymentModal(){ /* intentionally left blank - payments removed */ }
+    function closePaymentModal(){ /* intentionally left blank - payments removed */ }
+    function openPaymentPage(method){ /* intentionally left blank */ }
+    function confirmOrder(method){ /* not used - WhatsApp flow will be used */ }
+
+    /* ------------------------------
+       Expose debug helpers
+       ------------------------------ */
+    window._GB = {
+      getCart: () => cart,
+      getPending: () => pendingOrder,
+      getOrders: () => orders,
+      clearCart: () => { cart=[]; persistCart(); updateCart(); },
+      sendWhatsAppDemo: () => {
+        if (!pendingOrder) return alert('No pending order');
+        window.open(`https://wa.me/919978349653?text=Demo`, '_blank');
+      }
+    };
+
+  </script>
+</body>
+</html>
+

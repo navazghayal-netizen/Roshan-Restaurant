@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Roshan Restaurant Admin</title>
+  <meta name="theme-color" content="#F59E0B" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { overflow-x: hidden; }
+    .focus-ring:focus { outline: 3px solid rgba(245,158,11,0.25); outline-offset: 2px; }
+    .admin-card { border-radius: 14px; }
+    .field {
+      width: 100%;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 12px;
+      background: white;
+    }
+    .field:focus {
+      outline: 3px solid rgba(245, 158, 11, 0.22);
+      border-color: #f59e0b;
+    }
+    .action-btn {
+      min-height: 42px;
+      border-radius: 999px;
+      font-weight: 700;
+      transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.12);
+    }
+    .action-btn:hover {
+      transform: translateY(-1px);
+      filter: saturate(1.05);
+      box-shadow: 0 14px 24px rgba(15, 23, 42, 0.16);
+    }
+    .product-img { aspect-ratio: 4 / 3; }
+    .toast {
+      transform: translateY(12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    @media (max-width: 640px) {
+      .product-img { height: 92px; }
+      .admin-card { border-radius: 12px; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+  <header class="sticky top-0 z-40 bg-white shadow">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-yellow-500 flex items-center justify-center text-white font-bold shadow">R</div>
+        <div>
+          <h1 class="text-lg sm:text-2xl font-bold text-yellow-600 leading-tight">Roshan Restaurant</h1>
+          <p class="text-xs text-gray-500">Admin Panel</p>
+        </div>
+      </a>
+      <div class="flex items-center gap-3">
+        <span id="adminName" class="text-sm font-semibold text-gray-700"></span>
+        <button id="logoutBtn" class="rounded-full bg-red-600 px-4 py-2 text-sm font-bold text-white shadow hover:bg-red-700 focus-ring">Logout</button>
+        <a href="index.html" class="rounded-full bg-yellow-600 px-4 py-2 text-sm font-bold text-white shadow hover:bg-yellow-700 focus-ring">View Site</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 sm:py-8">
+    <section class="grid gap-6 lg:grid-cols-[380px_1fr]">
+      <form id="productForm" class="admin-card bg-white p-4 sm:p-5 shadow border border-gray-100">
+        <div class="mb-4">
+          <h2 id="formTitle" class="text-2xl font-bold text-yellow-700">Add Product</h2>
+          <p class="text-sm text-gray-500">Changes save to server automatically. Website updates instantly for all visitors.</p>
+        </div>
+
+        <input id="productId" type="hidden" />
+
+        <div class="space-y-4">
+          <div>
+            <label for="name" class="block text-sm font-semibold mb-1">Product Name</label>
+            <input id="name" class="field" type="text" placeholder="Chicken Curry" required />
+          </div>
+
+          <div>
+            <label for="price" class="block text-sm font-semibold mb-1">Price</label>
+            <input id="price" class="field" type="text" inputmode="numeric" placeholder="200" required />
+            <p class="mt-1 text-xs text-gray-500">Only amount, example: 250</p>
+          </div>
+
+          <div>
+            <label for="desc" class="block text-sm font-semibold mb-1">Description</label>
+            <textarea id="desc" class="field" rows="3" placeholder="Fresh, spicy and homely taste" required></textarea>
+          </div>
+
+          <div>
+            <label for="imageFile" class="block text-sm font-semibold mb-1">Product Photo</label>
+            <input id="imageFile" class="field" type="file" accept="image/*" />
+            <p class="mt-1 text-xs text-gray-500">Upload photo from mobile/computer, or paste URL below.</p>
+          </div>
+
+          <div>
+            <label for="img" class="block text-sm font-semibold mb-1">Image URL</label>
+            <input id="img" class="field" type="text" placeholder="Auto-filled after upload or paste image URL" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <button id="saveBtn" type="submit" class="action-btn bg-gradient-to-br from-yellow-500 to-yellow-700 text-white">Save</button>
+            <button id="cancelBtn" type="button" class="action-btn bg-white border border-gray-200 text-gray-700">Clear</button>
+          </div>
+        </div>
+      </form>
+
+      <section class="admin-card bg-white p-4 sm:p-5 shadow border border-gray-100">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+          <div>
+            <h2 class="text-2xl font-bold text-yellow-700">Products</h2>
+            <p id="countText" class="text-sm text-gray-500"></p>
+          </div>
+          <button id="resetBtn" type="button" class="rounded-full border border-red-200 px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 focus-ring">Reset Default</button>
+        </div>
+
+        <div id="productsList" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        <p id="emptyState" class="hidden text-center text-gray-500 py-12">No products yet. Add your first product.</p>
+      </section>
+    </section>
+  </main>
+
+  <div id="toast" class="toast fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 rounded-xl bg-gray-900 px-4 py-3 text-sm font-semibold text-white shadow-xl"></div>
+
+  <script>
+    // Authentication Check
+    function checkAdminAccess() {
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+      
+      if (!currentUser || !currentUser.isAdmin) {
+        // Redirect to login if not admin
+        window.location.href = 'admin-login.html';
+        return false;
+      }
+      
+      // Display admin name
+      const adminNameEl = document.getElementById('adminName');
+      if (adminNameEl) {
+        adminNameEl.textContent = `Admin: ${currentUser.mobile}`;
+      }
+      
+      return true;
+    }
+
+    // Logout functionality
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+      }
+    });
+
+    // Check access on page load
+    if (!checkAdminAccess()) {
+      document.body.innerHTML = '';
+    }
+
+    // Initialize admin user on first load
+    function initializeAdminUser() {
+      const users = JSON.parse(localStorage.getItem('users') || '{}');
+      if (!users['admin@roshan.com']) {
+        users['admin@roshan.com'] = {
+          mobile: '9978349653',
+          email: 'admin@roshan.com',
+          password: btoa('roshan321'),
+          createdAt: new Date().toISOString(),
+          isAdmin: true
+        };
+        localStorage.setItem('users', JSON.stringify(users));
+      }
+    }
+
+    initializeAdminUser();
+
+    const STORAGE_KEY = 'rr_products_v1';
+    const PRODUCT_EVENT_KEY = 'rr_products_updated_at';
+    const BACKEND_AVAILABLE = window.location.protocol.startsWith('http');
+    const PRODUCTS_API = '/api/products';
+    const IMAGE_UPLOAD_API = '/api/upload-image';
+    const productChannel = 'BroadcastChannel' in window ? new BroadcastChannel('rr_products_channel') : null;
+    const DEFAULT_PRODUCTS = [
+      { id: 'p1',  name: 'Gravy Chicken',  price: 200, desc: 'Made with homely taste & restaurant-style flavor',         img: 'Image/chicken-gravy-1.webp' },
+      { id: 'p2',  name: 'Gravy Mutton',   price: 250, desc: 'Loaded with tender mutton & rich spices',                  img: 'Image/mutton-500x500.webp' },
+      { id: 'p3',  name: 'Jinga',          price: 200, desc: 'Ocean freshness cooked with authentic masala',             img: 'Image/Prawn-Biryani-Recipe-480x270.webp' },
+      { id: 'p4',  name: 'Fish',           price: 200, desc: 'Ocean Fresh Flavor',                                       img: 'Image/Fish-Curry-4.jpg' },
+      { id: 'p5',  name: 'Chicken Biryani',price: 220, desc: 'Chicken Biryani — Tradition Served Hot',                  img: 'Image/Boneless-Chicken-Biryani-Meghanas-2-500x500.jpg' },
+      { id: 'p6',  name: 'Mutton Biryani', price: 280, desc: 'Mutton Biryani — A taste of royal tradition',             img: 'Image/Mutton-Masala-min.jpg' },
+      { id: 'p7',  name: 'Jinga Biryani',  price: 250, desc: 'Jinga Biryani — Coastal freshness meets royal spice',     img: 'Image/Prawn-Biryani-Recipe-480x270.webp' },
+      { id: 'p9',  name: 'Fish Biryani',   price: 250, desc: 'Fish Biryani — Coastal taste with royal spice',           img: 'Image/Fish-Masala1_1200x.jpg' },
+      { id: 'p10', name: 'Chicken Masala', price: 220, desc: 'Every bite bursting with masala magic',                   img: 'Image/GrChicken-Masala-Curryoup-1.jpg' },
+      { id: 'p11', name: 'Mutton Masala',  price: 300, desc: 'Mutton Masala — Spiced with tradition, served with love', img: 'Image/Mutton-Masala-min.jpg' },
+      { id: 'p12', name: 'Jinga Masala',   price: 250, desc: 'Jinga Masala — Ocean freshness with desi spices',        img: 'Image/Prawn-Biryani-Recipe-480x270.webp' },
+      { id: 'p13', name: 'Fish Masala',    price: 250, desc: 'Fish Masala — Ocean flavor with desi spice',              img: 'Image/Fish-Masala1_1200x.jpg' },
+      { id: 'p14', name: 'Rotla',          price: 25,  desc: 'Soft, fresh & homely — just like Ghar ka Rotla',         img: 'Image/Bajri-Rotla-Kutch.png' },
+      { id: 'p15', name: 'Rotli',          price: 15,  desc: 'Soft & fresh Rotli — the soul of every meal',            img: 'Image/roti.jpg' }
+    ];
+
+    const form = document.getElementById('productForm');
+    const productId = document.getElementById('productId');
+    const nameInput = document.getElementById('name');
+    const priceInput = document.getElementById('price');
+    const descInput = document.getElementById('desc');
+    const imgInput = document.getElementById('img');
+    const imageFileInput = document.getElementById('imageFile');
+    const formTitle = document.getElementById('formTitle');
+    const productsList = document.getElementById('productsList');
+    const countText = document.getElementById('countText');
+    const emptyState = document.getElementById('emptyState');
+    const toast = document.getElementById('toast');
+
+    let products = [];
+    initProducts();
+
+    async function initProducts() {
+      products = await loadProducts();
+      saveProducts();
+      renderProducts();
+    }
+
+    async function loadProducts() {
+      if (BACKEND_AVAILABLE) {
+        try {
+          const response = await fetch(PRODUCTS_API);
+          if (response.ok) {
+            const data = await response.json();
+            return normalizeProducts(Array.isArray(data) && data.length ? data : DEFAULT_PRODUCTS);
+          }
+        } catch (error) {
+          console.warn('Backend load failed, falling back to local products', error);
+        }
+      }
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return normalizeProducts(Array.isArray(saved) && saved.length ? saved : DEFAULT_PRODUCTS);
+      } catch (error) {
+        return normalizeProducts(DEFAULT_PRODUCTS);
+      }
+    }
+
+    async function saveProducts() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+      localStorage.setItem(PRODUCT_EVENT_KEY, String(Date.now()));
+      productChannel?.postMessage({ type: 'products-updated' });
+      if (BACKEND_AVAILABLE) {
+        try {
+          const response = await fetch(PRODUCTS_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(products)
+          });
+          if (!response.ok) {
+            console.warn('Backend save failed with status', response.status);
+            showToast('⚠️ Server save failed — saved locally only');
+          }
+        } catch (error) {
+          console.warn('Failed to save products to backend', error);
+          showToast('⚠️ Server not reachable — saved locally only');
+        }
+      }
+    }
+
+    function formatCurrency(value) {
+      return '₹' + Number(value).toLocaleString('en-IN');
+    }
+
+    function productImage(name, from, to) {
+      const safeName = String(name).replace(/[&<>"']/g, '');
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="${from}"/>
+              <stop offset="1" stop-color="${to}"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="600" rx="34" fill="url(#g)"/>
+          <circle cx="400" cy="270" r="132" fill="rgba(255,255,255,0.9)"/>
+          <circle cx="400" cy="270" r="96" fill="rgba(251,191,36,0.28)"/>
+          <path d="M280 420c90 42 150 42 240 0" fill="none" stroke="rgba(255,255,255,0.75)" stroke-width="18" stroke-linecap="round"/>
+          <text x="400" y="502" fill="white" font-family="Arial, sans-serif" font-size="52" font-weight="700" text-anchor="middle">${safeName}</text>
+        </svg>`;
+      return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+    }
+
+    function normalizeProducts(list) {
+      return list.map((product, index) => ({
+        id: String(product.id || `p-${Date.now()}-${index}`),
+        name: String(product.name || '').trim(),
+        price: parsePrice(product.price),
+        desc: String(product.desc || '').trim(),
+        img: normalizeImage(product.img, product.name, index)
+      })).filter((product) => product.name && product.price > 0);
+    }
+
+    function normalizeImage(value, name, index) {
+      const img = String(value || '').trim();
+      if (img.startsWith('data:image/') || img.startsWith('http://') || img.startsWith('https://')) return img;
+      if (img) {
+        if (!img.startsWith('Image/') && !img.startsWith('/') && !img.includes('://')) {
+          return `Image/${img}`;
+        }
+        return img;
+      }
+      const palette = [
+        ['#f97316', '#991b1b'],
+        ['#dc2626', '#7f1d1d'],
+        ['#0ea5e9', '#155e75'],
+        ['#14b8a6', '#115e59'],
+        ['#f59e0b', '#92400e'],
+        ['#b45309', '#78350f']
+      ];
+      const colors = palette[index % palette.length];
+      return productImage(name || 'Product', colors[0], colors[1]);
+    }
+
+    function parsePrice(value) {
+      const cleaned = String(value || '').replace(/[^\d.]/g, '');
+      const amount = Number(cleaned);
+      return Number.isFinite(amount) ? Math.round(amount) : 0;
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      })[char]);
+    }
+
+    function resetForm() {
+      form.reset();
+      productId.value = '';
+      imageFileInput.value = '';
+      formTitle.textContent = 'Add Product';
+      document.getElementById('saveBtn').textContent = 'Save';
+    }
+
+    function renderProducts() {
+      productsList.innerHTML = '';
+      countText.textContent = `${products.length} product${products.length === 1 ? '' : 's'} in menu`;
+      emptyState.classList.toggle('hidden', products.length !== 0);
+
+      products.forEach((product) => {
+        const card = document.createElement('article');
+        card.className = 'admin-card border border-gray-100 bg-yellow-50/40 p-3 shadow-sm';
+        card.innerHTML = `
+          <img src="${escapeHtml(product.img)}" alt="${escapeHtml(product.name)}" class="product-img h-32 w-full rounded-lg object-cover bg-gray-100" loading="lazy" onerror="this.src=productImage('${escapeHtml(product.name)}', '#f59e0b', '#92400e')" />
+          <div class="mt-3">
+            <div class="flex items-start justify-between gap-2">
+              <h3 class="font-bold text-gray-900">${escapeHtml(product.name)}</h3>
+              <span class="font-bold text-yellow-700">${formatCurrency(product.price)}</span>
+            </div>
+            <p class="mt-1 min-h-10 text-sm text-gray-600">${escapeHtml(product.desc)}</p>
+            <div class="mt-3 grid grid-cols-2 gap-2">
+              <button type="button" class="edit-btn rounded-full bg-yellow-600 px-3 py-2 text-sm font-bold text-white hover:bg-yellow-700 focus-ring">Edit</button>
+              <button type="button" class="delete-btn rounded-full bg-white border border-red-200 px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-50 focus-ring">Remove</button>
+            </div>
+          </div>
+        `;
+
+        card.querySelector('.edit-btn').addEventListener('click', () => editProduct(product.id));
+        card.querySelector('.delete-btn').addEventListener('click', () => removeProduct(product.id));
+        productsList.appendChild(card);
+      });
+    }
+
+    function editProduct(id) {
+      const product = products.find((item) => item.id === id);
+      if (!product) return;
+      productId.value = product.id;
+      nameInput.value = product.name;
+      priceInput.value = product.price;
+      descInput.value = product.desc;
+      imgInput.value = product.img;
+      formTitle.textContent = 'Edit Product';
+      document.getElementById('saveBtn').textContent = 'Update';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function removeProduct(id) {
+      const product = products.find((item) => item.id === id);
+      if (!product || !confirm(`Remove ${product.name}?`)) return;
+      products = products.filter((item) => item.id !== id);
+      await saveProducts();
+      renderProducts();
+      if (productId.value === id) resetForm();
+      showToast('✅ Product removed from menu!');
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const payload = {
+        id: productId.value || `p-${Date.now()}`,
+        name: nameInput.value.trim(),
+        price: parsePrice(priceInput.value),
+        desc: descInput.value.trim(),
+        img: imgInput.value.trim() || 'Image/roshan-hero.jpeg'
+      };
+
+      if (!payload.name || payload.price <= 0 || !payload.desc || !payload.img) {
+        alert('Please fill all details and enter a valid price.');
+        return;
+      }
+
+      const existingIndex = products.findIndex((item) => item.id === payload.id);
+      if (existingIndex >= 0) products[existingIndex] = payload;
+      else products.push(payload);
+
+      products = normalizeProducts(products);
+      await saveProducts();
+      renderProducts();
+      resetForm();
+      showToast(existingIndex >= 0 ? '✅ Product updated on server!' : '✅ Product added to menu!');
+    });
+
+    imageFileInput.addEventListener('change', async () => {
+      const file = imageFileInput.files && imageFileInput.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        imageFileInput.value = '';
+        return;
+      }
+
+      if (BACKEND_AVAILABLE) {
+        try {
+          const formData = new FormData();
+          formData.append('image', file);
+          const response = await fetch(IMAGE_UPLOAD_API, { method: 'POST', body: formData });
+          const data = await response.json();
+          if (response.ok && data.imagePath) {
+            imgInput.value = data.imagePath;
+            showToast('Photo uploaded and saved');
+            return;
+          }
+          console.warn('Image upload failed, falling back to local data URL', data);
+        } catch (error) {
+          console.warn('Image upload failed', error);
+        }
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        imgInput.value = reader.result;
+        showToast('Photo added');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('cancelBtn').addEventListener('click', resetForm);
+
+    document.getElementById('resetBtn').addEventListener('click', async () => {
+      if (!confirm('Reset product list to default menu?')) return;
+      products = normalizeProducts(DEFAULT_PRODUCTS);
+      await saveProducts();
+      renderProducts();
+      resetForm();
+      showToast('✅ Default menu restored on server!');
+    });
+
+    renderProducts();
+  </script>
+</body>
+</html>
