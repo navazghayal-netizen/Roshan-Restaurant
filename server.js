@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname)));
 // JSONBin.io se free permanent storage milti hai
 // .env mein JSONBIN_BIN_ID aur JSONBIN_API_KEY daalna hoga
 const JSONBIN_BIN_ID  = process.env.JSONBIN_BIN_ID  || '';
-const JSONBIN_API_KEY = process.env.JSONBIN_API_KEY || '';
+const JSONBIN_API_KEY = process.env.JSONBIN_API_KEY || '`';
 const JSONBIN_URL     = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
 const USE_JSONBIN = !!(JSONBIN_BIN_ID && JSONBIN_API_KEY);
